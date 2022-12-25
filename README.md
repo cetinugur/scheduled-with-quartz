@@ -2,7 +2,7 @@
 
 * .net Core 7 project.
 
-* Quartz.NET to handle schduled jobs.
+* Quartz.NET to handle scheduled jobs.
 
 
 Aims to use managed Quartz.NET jobs.
