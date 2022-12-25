@@ -1,6 +1,6 @@
-﻿namespace ScheduledJobs.Core.Models
+﻿namespace ScheduledJobs.Models
 {
-    public class ScheduledJobModel
+    public class ScheduledJob
     {
         public int Id { get; set; }
         public string? Project { get; set; }

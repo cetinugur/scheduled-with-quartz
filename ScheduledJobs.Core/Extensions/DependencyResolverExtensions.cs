@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Quartz.Impl;
 using ScheduledJobs.Core.Jobs;
 using ScheduledJobs.Core.Services;
+using ScheduledJobs.Data.DependencyResolverExtensions;
 
 namespace ScheduledJobs.Core.Extensions
 {
@@ -19,6 +20,7 @@ namespace ScheduledJobs.Core.Extensions
             services.AddSingleton<JobEngineCoreService>();
             services.AddSingleton<StdSchedulerFactory>();
             services.AddSingleton<ConfigControllerJob>();
+            services.AddDataService();
             return services;
         }
 

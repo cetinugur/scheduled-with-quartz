@@ -1,4 +1,4 @@
-﻿namespace ScheduledJobs.Core.Models
+﻿namespace ScheduledJobs.Models
 {
     public class OperationResult
     {

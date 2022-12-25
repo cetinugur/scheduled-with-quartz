@@ -1,8 +1,8 @@
 ﻿using Quartz;
 using ScheduledJobs.Core.Interfaces;
-using ScheduledJobs.Core.Models;
+using ScheduledJobs.Models;
 
-namespace ScheduledJobs.App.Core
+namespace ScheduledJobs.App.Core.Interfaces
 {
     public interface IAppJobBase : ISchedulerJob
     {

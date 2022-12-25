@@ -8,3 +8,7 @@ ScheduledJobs.Core/bin
 /.vs/ScheduledWithQuartz/FileContentIndex
 /ScheduledJobs.App.ImpExample/bin/Debug/net7.0
 /ScheduledJobs.App.ImpExample/obj
+ScheduledJobs.Data/bin
+ScheduledJobs.Data/obj
+ScheduledJobs.Models/bin
+ScheduledJobs.Models/obj

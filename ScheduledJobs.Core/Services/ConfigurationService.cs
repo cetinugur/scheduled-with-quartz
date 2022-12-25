@@ -1,21 +1,26 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ScheduledJobs.Core.Models;
+using ScheduledJobs.Models;
+using ScheduledJobs.Data.Interfaces;
+using ScheduledJobs.Data.Services;
 
 namespace ScheduledJobs.Core.Services
 {
     public class ConfigurationService
     {
         private readonly IConfiguration configuration;
+        private readonly IDataService dataService;
         public ConfigurationService(IConfiguration configuration)
         {
             this.configuration = configuration;
+            //this.dataService = dataService;
+            dataService = new DummyDataService();
         }
 
         public string[]? JobProjects => configuration.GetSection("ProjectSettings:JobProjects").Get<string[]>();
 
-        public List<ScheduledJobModel> GetConfiguration(string[]? projectList = null)
+        public List<ScheduledJob> GetConfiguration(string[]? projectList = null)
         {
-            List<ScheduledJobModel> configuration = new();
+            List<ScheduledJob> configuration = new();
             try
             {
                 string[]? projects;
@@ -34,6 +39,8 @@ namespace ScheduledJobs.Core.Services
                         projects = new string[] { System.Reflection.Assembly.GetEntryAssembly().GetName().Name };
                     }
                 }
+
+                configuration = MapModel(dataService.GetJobs().ToList());
             }
             catch (Exception exp)
             {
@@ -44,16 +51,16 @@ namespace ScheduledJobs.Core.Services
             return configuration;
         }
 
-        private List<ScheduledJobModel> MapModel(List<ScheduledJobModel> serviceModel)
+        private List<ScheduledJob> MapModel(List<ScheduledJob> serviceModel)
         {
-            List<ScheduledJobModel> result = new();
+            List<ScheduledJob> result = new();
 
             var details = serviceModel.SelectMany(x => x.JobDetails).ToList();
             foreach (var srvModelDetailItem in details)
             {
                 var jobModelParent = serviceModel.FirstOrDefault(x => x.Id == srvModelDetailItem.JobId);
 
-                ScheduledJobModel jobModel = new()
+                ScheduledJob jobModel = new()
                 {
                     Id = srvModelDetailItem.JobId,
                     Active = jobModelParent.Active,
@@ -64,13 +71,12 @@ namespace ScheduledJobs.Core.Services
                     {
                         new ()
                         {
-                                Id = srvModelDetailItem.Id,
-                                Active = srvModelDetailItem.Active,
-                                PeriodAsCron = srvModelDetailItem.PeriodAsCron,
-                                JobId = srvModelDetailItem.JobId,
-                                Name = srvModelDetailItem.Name
+                            Id = srvModelDetailItem.Id,
+                            Active = srvModelDetailItem.Active,
+                            PeriodAsCron = srvModelDetailItem.PeriodAsCron,
+                            JobId = srvModelDetailItem.JobId,
+                            Name = srvModelDetailItem.Name
                         }
-
                     }
                 };
 

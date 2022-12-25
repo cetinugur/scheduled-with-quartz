@@ -1,5 +1,5 @@
 ﻿using Quartz.Impl;
-using ScheduledJobs.Core.Models;
+using ScheduledJobs.Models;
 using ScheduledJobs.Core.Jobs;
 using ScheduledJobs.Core.Extensions;
 
@@ -7,8 +7,8 @@ namespace ScheduledJobs.Core.Services
 {
     public class JobEngineCoreService : JobEngineBaseService
     {
-        protected List<ScheduledJobModel>? lastConfiguration { get; set; }
-        protected List<ScheduledJobModel>? currentConfiguration { get; set; }
+        protected List<ScheduledJob>? lastConfiguration { get; set; }
+        protected List<ScheduledJob>? currentConfiguration { get; set; }
         protected ConfigControllerJob controllerJob { get; set; }
 
         public JobEngineCoreService(StdSchedulerFactory stdSchedulerFactory
@@ -25,7 +25,7 @@ namespace ScheduledJobs.Core.Services
             currentConfiguration = new();
             if (UserControllerJob)
             {
-                AddJob(new ScheduledJobModel
+                AddJob(new ScheduledJob
                 {
                     Id = -1,
                     Active = true,
@@ -45,7 +45,7 @@ namespace ScheduledJobs.Core.Services
                 });
             }
         }
-        public void AddJob(ScheduledJobModel job)
+        public void AddJob(ScheduledJob job)
         {
             _ = PopulateJob(job);
         }
@@ -53,12 +53,12 @@ namespace ScheduledJobs.Core.Services
         {
             PopulateJobs(GetConfiguration().Where(x => x.Active).ToList().Where(x => x.JobDetail.Active).ToList()).GetAwaiter().GetResult();
         }
-        public void SetConfiguration(List<ScheduledJobModel> configuration)
+        public void SetConfiguration(List<ScheduledJob> configuration)
         {
             currentConfiguration = new();
             currentConfiguration.AddRange(configuration);
         }
-        private List<ScheduledJobModel> GetConfiguration()
+        private List<ScheduledJob> GetConfiguration()
         {
             return currentConfiguration;
         }
@@ -69,9 +69,9 @@ namespace ScheduledJobs.Core.Services
         /// </summary>
         public void CheckChanges()
         {
-            List<ScheduledJobModel> Added = new();
-            List<ScheduledJobModel> Removed = new();
-            List<ScheduledJobModel> Changed = new();
+            List<ScheduledJob> Added = new();
+            List<ScheduledJob> Removed = new();
+            List<ScheduledJob> Changed = new();
 
             if (lastConfiguration != null)
             {
@@ -86,9 +86,9 @@ namespace ScheduledJobs.Core.Services
 
                 Removed = lastConfiguration.Where(x => !currentConfiguration.Select(y => y.Id).Contains(x.Id)).ToList();
 
-                foreach (ScheduledJobModel lastConfig in lastConfiguration)
+                foreach (ScheduledJob lastConfig in lastConfiguration)
                 {
-                    foreach (ScheduledJobModel newConfig in currentConfiguration)
+                    foreach (ScheduledJob newConfig in currentConfiguration)
                     {
                         if (lastConfig.JobIdentity == newConfig.JobIdentity && !lastConfig.IsEqual(newConfig))
                         {
@@ -102,11 +102,11 @@ namespace ScheduledJobs.Core.Services
             ApplyChanges(Added, Removed, Changed);
         }
 
-        private void ApplyChanges(List<ScheduledJobModel> Added, List<ScheduledJobModel> Removed, List<ScheduledJobModel> Changed)
+        private void ApplyChanges(List<ScheduledJob> Added, List<ScheduledJob> Removed, List<ScheduledJob> Changed)
         {
             if (Changed.Count > 0)
             {
-                List<ScheduledJobModel> tmpChanged = new();
+                List<ScheduledJob> tmpChanged = new();
                 foreach (var chn in Changed)
                 {
                     if (!chn.Active || !chn.JobDetail.Active)
@@ -120,7 +120,7 @@ namespace ScheduledJobs.Core.Services
                     RemoveJobs(tmpChanged).GetAwaiter().GetResult();
                 }
 
-                tmpChanged = new List<ScheduledJobModel>();
+                tmpChanged = new List<ScheduledJob>();
                 foreach (var chn in Changed)
                 {
                     if (chn.Active && chn.JobDetail.Active)

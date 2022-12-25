@@ -1,6 +1,6 @@
 ﻿using ScheduledJobs.Core.Services;
 
-namespace ScheduledJobs.App.Core
+namespace ScheduledJobs.App.Core.Engines
 {
     public class ScheduledJobsEngine
     {

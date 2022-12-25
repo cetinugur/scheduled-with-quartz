@@ -1,6 +1,6 @@
 ﻿using Quartz.Impl;
 using Quartz;
-using ScheduledJobs.Core.Models;
+using ScheduledJobs.Models;
 
 namespace ScheduledJobs.Core.Services
 {
@@ -19,7 +19,7 @@ namespace ScheduledJobs.Core.Services
             this.scheduler = stdSchedulerFactory.GetScheduler().Result;
         }
 
-        public async Task PopulateJobs(List<ScheduledJobModel> jobs)
+        public async Task PopulateJobs(List<ScheduledJob> jobs)
         {
             foreach (var job in jobs)
             {
@@ -27,7 +27,7 @@ namespace ScheduledJobs.Core.Services
             }
         }
 
-        public async Task PopulateJob(ScheduledJobModel model)
+        public async Task PopulateJob(ScheduledJob model)
         {
 
             Type? jobType = GetJobTypeFromModel(model);
@@ -47,7 +47,7 @@ namespace ScheduledJobs.Core.Services
                .OfType(jobType)
                .Build();
 
-            jobdetail.JobDataMap[nameof(ScheduledJobModel)] = model;
+            jobdetail.JobDataMap[nameof(ScheduledJob)] = model;
             jobdetail.JobDataMap[nameof(ConfigurationService)] = this.configurationService;
             jobdetail.JobDataMap[nameof(JobEngineBaseService)] = this;
 
@@ -61,7 +61,7 @@ namespace ScheduledJobs.Core.Services
             await scheduler.ScheduleJob(jobdetail, trigger);
         }
 
-        public async Task RemoveJobs(List<ScheduledJobModel> models)
+        public async Task RemoveJobs(List<ScheduledJob> models)
         {
             foreach (var model in models)
             {
@@ -71,7 +71,7 @@ namespace ScheduledJobs.Core.Services
             }
         }
 
-        public async Task ReScheduleJobs(List<ScheduledJobModel> models)
+        public async Task ReScheduleJobs(List<ScheduledJob> models)
         {
             foreach (var job in models)
             {
@@ -79,7 +79,7 @@ namespace ScheduledJobs.Core.Services
             }
         }
 
-        public async Task ReScheduleJob(ScheduledJobModel model)
+        public async Task ReScheduleJob(ScheduledJob model)
         {
             var exTrigger = scheduler.GetTrigger(new TriggerKey(GetTriggerIdentityKey(model)));
 
@@ -105,17 +105,17 @@ namespace ScheduledJobs.Core.Services
             await scheduler.RescheduleJob(exTriggerKey, trigger);
         }
 
-        private string GetTriggerIdentityKey(ScheduledJobModel model)
+        private string GetTriggerIdentityKey(ScheduledJob model)
         {
             return $"{model.JobName}_{model.JobIdentity}_tik";
         }
 
-        private string GetJobIdentityKey(ScheduledJobModel model)
+        private string GetJobIdentityKey(ScheduledJob model)
         {
             return $"{model.JobName}_{model.JobIdentity}_jik";
         }
 
-        private Type? GetJobTypeFromModel(ScheduledJobModel model)
+        private Type? GetJobTypeFromModel(ScheduledJob model)
         {
             Type? jobType = Type.GetType($"{model.JobName}, {model.Project}");
 
