@@ -9,7 +9,6 @@ namespace ScheduledJobs.Core.Jobs
     {
         public ScheduledJob? JobModel { get; set; }
         public ConfigurationService? ConfigurationService { get; set; }
-
         protected JobEngineCoreService? JobEngineService { get; set; }
 
         public Task Execute(IJobExecutionContext context)

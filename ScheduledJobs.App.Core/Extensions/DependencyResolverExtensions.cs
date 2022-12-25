@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ScheduledJobs.App.Core.Engines;
 using ScheduledJobs.Core.Extensions;
+using ScheduledJobs.Models;
 
 namespace ScheduledJobs.App.Core.Extensions
 {
@@ -12,19 +13,19 @@ namespace ScheduledJobs.App.Core.Extensions
             string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var appsettingsfile = string.IsNullOrEmpty(environment) ? "appsettings.json" : $"appsettings.{environment}.json";
 
-            IConfiguration config = new ConfigurationBuilder()
+            IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile(appsettingsfile)
                 .AddEnvironmentVariables()
                 .Build();
 
             services
                     .AddSingleton<ScheduledJobsEngine>()
-                    .AddBusinessServices(config)
+                    .AddSingleton(configuration)
                     .AddScheduledEngine();
 
             if (withConfigControllerJob)
             {
-                services.AddControllerJob(config["ProjectSettings:ConfigControllerJobCronPeriod"]);
+                services.AddConfigControllerJob(configuration);
             }
 
             return services;

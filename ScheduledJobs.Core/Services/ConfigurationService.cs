@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using ScheduledJobs.Models;
 using ScheduledJobs.Data.Interfaces;
-using ScheduledJobs.Data.Services;
 
 namespace ScheduledJobs.Core.Services
 {
@@ -9,14 +8,13 @@ namespace ScheduledJobs.Core.Services
     {
         private readonly IConfiguration configuration;
         private readonly IDataService dataService;
-        public ConfigurationService(IConfiguration configuration)
+        public ConfigurationService(IConfiguration configuration,IDataService dataService)
         {
             this.configuration = configuration;
-            //this.dataService = dataService;
-            dataService = new DummyDataService();
+            this.dataService = dataService;
         }
 
-        public string[]? JobProjects => configuration.GetSection("ProjectSettings:JobProjects").Get<string[]>();
+        public string[]? JobProjects => configuration?.GetSection(nameof(Projectsettings)).Get<Projectsettings>().JobProjects;
 
         public List<ScheduledJob> GetConfiguration(string[]? projectList = null)
         {
@@ -44,7 +42,6 @@ namespace ScheduledJobs.Core.Services
             }
             catch (Exception exp)
             {
-
                 Console.WriteLine($"Job konfigürasyonu okunurken hata oluştu. @{this.GetType().FullName}. Hata : {exp.Message}");
             }
 

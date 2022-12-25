@@ -23,7 +23,7 @@ namespace ScheduledJobs.Core.Services
         {
             scheduler.Start().Wait();
             currentConfiguration = new();
-            if (UserControllerJob)
+            if (AddConfigControllerJob)
             {
                 AddJob(new ScheduledJob
                 {
@@ -38,7 +38,7 @@ namespace ScheduledJobs.Core.Services
                         {
                             Id = -1,
                             JobId = -1,
-                            PeriodAsCron = JobEngineBaseService.CronPeriod,
+                            PeriodAsCron = JobEngineBaseService.ConfigControllerJobCronPeriod,
                             Active = true
                         }
                     }
@@ -63,10 +63,6 @@ namespace ScheduledJobs.Core.Services
             return currentConfiguration;
         }
 
-        /// <summary>
-        /// Joblara dair db seviyesinde bir değişiklik olup olmadığını kontrol eden metod.
-        /// Eklenen, pasife çekilen, silinen veya periyodu değişen jobları bu değişikliklerin çalışma zamanında uygulanması için tespit eder.
-        /// </summary>
         public void CheckChanges()
         {
             List<ScheduledJob> Added = new();
@@ -86,19 +82,13 @@ namespace ScheduledJobs.Core.Services
 
                 Removed = lastConfiguration.Where(x => !currentConfiguration.Select(y => y.Id).Contains(x.Id)).ToList();
 
-                foreach (ScheduledJob lastConfig in lastConfiguration)
-                {
-                    foreach (ScheduledJob newConfig in currentConfiguration)
-                    {
-                        if (lastConfig.JobIdentity == newConfig.JobIdentity && !lastConfig.IsEqual(newConfig))
-                        {
-                            Changed.Add(newConfig);
-                        }
-                    }
-                }
+                Changed.AddRange(from ScheduledJob lastConfig in lastConfiguration
+                                 from ScheduledJob newConfig in currentConfiguration
+                                 where lastConfig.JobIdentity == newConfig.JobIdentity && !lastConfig.IsEqual(newConfig)
+                                 select newConfig);
             }
 
-            lastConfiguration = currentConfiguration.ToList();
+            lastConfiguration = currentConfiguration?.ToList();
             ApplyChanges(Added, Removed, Changed);
         }
 
@@ -107,20 +97,17 @@ namespace ScheduledJobs.Core.Services
             if (Changed.Count > 0)
             {
                 List<ScheduledJob> tmpChanged = new();
-                foreach (var chn in Changed)
-                {
-                    if (!chn.Active || !chn.JobDetail.Active)
-                    {
-                        tmpChanged.Add(chn);
-                    }
-                }
 
+                tmpChanged.AddRange(from chn in Changed
+                                    where !chn.Active || !chn.JobDetail.Active
+                                    select chn);
                 if (tmpChanged.Any())
                 {
                     RemoveJobs(tmpChanged).GetAwaiter().GetResult();
                 }
 
                 tmpChanged = new List<ScheduledJob>();
+
                 foreach (var chn in Changed)
                 {
                     if (chn.Active && chn.JobDetail.Active)

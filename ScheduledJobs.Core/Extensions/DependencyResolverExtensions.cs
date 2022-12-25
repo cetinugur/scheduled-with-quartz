@@ -4,19 +4,15 @@ using Quartz.Impl;
 using ScheduledJobs.Core.Jobs;
 using ScheduledJobs.Core.Services;
 using ScheduledJobs.Data.DependencyResolverExtensions;
+using ScheduledJobs.Models;
 
 namespace ScheduledJobs.Core.Extensions
 {
     public static class DependencyResolverExtensions
     {
-        public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration config)
-        {
-            services.AddSingleton(new ConfigurationService(config));
-            return services;
-        }
-
         public static IServiceCollection AddScheduledEngine(this IServiceCollection services)
         {
+            services.AddSingleton<ConfigurationService, ConfigurationService>();
             services.AddSingleton<JobEngineCoreService>();
             services.AddSingleton<StdSchedulerFactory>();
             services.AddSingleton<ConfigControllerJob>();
@@ -24,10 +20,12 @@ namespace ScheduledJobs.Core.Extensions
             return services;
         }
 
-        public static IServiceCollection AddControllerJob(this IServiceCollection services, string cronperiod)
+        public static IServiceCollection AddConfigControllerJob(this IServiceCollection services, IConfiguration configuration)
         {
-            JobEngineBaseService.UserControllerJob = true;
-            JobEngineBaseService.CronPeriod = cronperiod;
+            var options = configuration.GetSection(nameof(Projectsettings)).Get<Projectsettings?>();
+
+            JobEngineBaseService.AddConfigControllerJob = true;
+            JobEngineBaseService.ConfigControllerJobCronPeriod = options?.ConfigControllerJobCronPeriod;
             return services;
         }
     }

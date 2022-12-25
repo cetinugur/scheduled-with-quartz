@@ -6,8 +6,8 @@ namespace ScheduledJobs.Core.Services
 {
     public abstract class JobEngineBaseService
     {
-        public static bool UserControllerJob { get; set; } = false;
-        public static string CronPeriod { get; set; } = "0 0/20 * 1/1 * ? *";
+        public static bool AddConfigControllerJob { get; set; } = false;
+        public static string ConfigControllerJobCronPeriod { get; set; } = "0 0/20 * 1/1 * ? *";
 
         protected IScheduler scheduler;
 
