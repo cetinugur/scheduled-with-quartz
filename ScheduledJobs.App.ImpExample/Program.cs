@@ -5,10 +5,10 @@ using ScheduledJobs.App.Core.Extensions;
 try
 {
     var services = new ServiceCollection();
-    services.AddScheduledJobEngines(true);
+    services.AddScheduledJobEngines();
 
     await using var scope = services.BuildServiceProvider().CreateAsyncScope();
-    scope.ServiceProvider.GetRequiredService<ScheduledJobsEngine>().Run();
+    scope.ServiceProvider.GetRequiredService<JobEngineAppCore>().Run();
 }
 catch (Exception exp)
 {

@@ -1,12 +1,12 @@
-﻿using ScheduledJobs.Core.Services;
+﻿using ScheduledJobs.Core.Interfaces;
 
 namespace ScheduledJobs.App.Core.Engines
 {
-    public class ScheduledJobsEngine
+    public class JobEngineAppCore
     {
-        private readonly JobEngineCoreService jobEngine;
-        private readonly ConfigurationService configurationService;
-        public ScheduledJobsEngine(JobEngineCoreService jobEngine, ConfigurationService configurationService)
+        private readonly IJobEngineServiceCore jobEngine;
+        private readonly IConfigurationService configurationService;
+        public JobEngineAppCore(IJobEngineServiceCore jobEngine, IConfigurationService configurationService)
         {
             this.configurationService = configurationService;
             this.jobEngine = jobEngine;
@@ -15,6 +15,7 @@ namespace ScheduledJobs.App.Core.Engines
         public void Run()
         {
             jobEngine.Run();
+
             try
             {
                 jobEngine.SetConfiguration(configurationService.GetConfiguration());

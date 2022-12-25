@@ -8,7 +8,7 @@ namespace ScheduledJobs.App.Core.Extensions
 {
     public static class DependencyResolverExtensions
     {
-        public static IServiceCollection AddScheduledJobEngines(this IServiceCollection services, bool withConfigControllerJob)
+        public static IServiceCollection AddScheduledJobEngines(this IServiceCollection services)
         {
             string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var appsettingsfile = string.IsNullOrEmpty(environment) ? "appsettings.json" : $"appsettings.{environment}.json";
@@ -19,14 +19,9 @@ namespace ScheduledJobs.App.Core.Extensions
                 .Build();
 
             services
-                    .AddSingleton<ScheduledJobsEngine>()
+                    .AddSingleton<JobEngineAppCore>()
                     .AddSingleton(configuration)
                     .AddScheduledEngine();
-
-            if (withConfigControllerJob)
-            {
-                services.AddConfigControllerJob(configuration);
-            }
 
             return services;
         }

@@ -9,11 +9,11 @@ namespace ScheduledJobs.Core.Jobs
     {
         public ScheduledJob? JobModel { get; set; }
         public ConfigurationService? ConfigurationService { get; set; }
-        protected JobEngineCoreService? JobEngineService { get; set; }
+        protected JobEngineServiceCore? JobEngineService { get; set; }
 
         public Task Execute(IJobExecutionContext context)
         {
-            JobEngineService = (JobEngineCoreService)context.JobDetail.JobDataMap[nameof(JobEngineBaseService)];
+            JobEngineService = (JobEngineServiceCore)context.JobDetail.JobDataMap[nameof(JobEngineServiceCore)];
             ConfigurationService = (ConfigurationService)context.JobDetail.JobDataMap[nameof(Services.ConfigurationService)];
             JobModel = (ScheduledJob)context.JobDetail.JobDataMap[nameof(ScheduledJob)];
 

@@ -1,10 +1,5 @@
 ﻿using ScheduledJobs.Data.Interfaces;
 using ScheduledJobs.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScheduledJobs.Data.Services
 {
@@ -30,7 +25,7 @@ namespace ScheduledJobs.Data.Services
                        JobId = 1,
                        LastExecutionTime = null,
                        Name = "ScheduledJobs.App.ImpExample.ExampleJob 1",
-                       PeriodAsCron = "0/10 * * * * ?",
+                       PeriodAsCron = "0/2 * * * * ?",
                    },
                    new ScheduledJobDetail
                    {
@@ -39,7 +34,7 @@ namespace ScheduledJobs.Data.Services
                        JobId = 1,
                        LastExecutionTime = null,
                        Name = "ScheduledJobs.App.ImpExample.ExampleJob 2",
-                       PeriodAsCron = "0/05 * * * * ?",
+                       PeriodAsCron = "0/04 * * * * ?",
                    }
                 }
                 }

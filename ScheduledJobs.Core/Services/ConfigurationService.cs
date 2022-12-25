@@ -1,33 +1,37 @@
 ﻿using Microsoft.Extensions.Configuration;
 using ScheduledJobs.Models;
 using ScheduledJobs.Data.Interfaces;
+using ScheduledJobs.Core.Interfaces;
 
 namespace ScheduledJobs.Core.Services
 {
-    public class ConfigurationService
+    public class ConfigurationService : IConfigurationService
     {
         private readonly IConfiguration configuration;
         private readonly IDataService dataService;
-        public ConfigurationService(IConfiguration configuration,IDataService dataService)
+        private readonly IModelService modelService;
+        public ConfigurationService(IConfiguration configuration, IDataService dataService, IModelService modelService)
         {
             this.configuration = configuration;
             this.dataService = dataService;
+            this.modelService = modelService;
         }
-
-        public string[]? JobProjects => configuration?.GetSection(nameof(Projectsettings)).Get<Projectsettings>().JobProjects;
 
         public List<ScheduledJob> GetConfiguration(string[]? projectList = null)
         {
-            List<ScheduledJob> configuration = new();
+            List<ScheduledJob> result = new();
             try
             {
                 string[]? projects;
+
                 if (projectList is not null && projectList.Any())
                 {
                     projects = projectList;
                 }
                 else
                 {
+                    string[] JobProjects = configuration?.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>().JobProjects;
+
                     if (JobProjects is not null && JobProjects.Any())
                     {
                         projects = JobProjects;
@@ -38,46 +42,11 @@ namespace ScheduledJobs.Core.Services
                     }
                 }
 
-                configuration = MapModel(dataService.GetJobs().ToList());
+                result = modelService.Map(dataService.GetJobs().ToList());
             }
             catch (Exception exp)
             {
                 Console.WriteLine($"Job konfigürasyonu okunurken hata oluştu. @{this.GetType().FullName}. Hata : {exp.Message}");
-            }
-
-            return configuration;
-        }
-
-        private List<ScheduledJob> MapModel(List<ScheduledJob> serviceModel)
-        {
-            List<ScheduledJob> result = new();
-
-            var details = serviceModel.SelectMany(x => x.JobDetails).ToList();
-            foreach (var srvModelDetailItem in details)
-            {
-                var jobModelParent = serviceModel.FirstOrDefault(x => x.Id == srvModelDetailItem.JobId);
-
-                ScheduledJob jobModel = new()
-                {
-                    Id = srvModelDetailItem.JobId,
-                    Active = jobModelParent.Active,
-                    JobName = jobModelParent.JobName,
-                    Project = jobModelParent.Project,
-                    Description = jobModelParent.Description,
-                    JobDetails = new List<ScheduledJobDetail>
-                    {
-                        new ()
-                        {
-                            Id = srvModelDetailItem.Id,
-                            Active = srvModelDetailItem.Active,
-                            PeriodAsCron = srvModelDetailItem.PeriodAsCron,
-                            JobId = srvModelDetailItem.JobId,
-                            Name = srvModelDetailItem.Name
-                        }
-                    }
-                };
-
-                result.Add(jobModel);
             }
 
             return result;

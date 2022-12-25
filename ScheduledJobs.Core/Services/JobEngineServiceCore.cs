@@ -1,29 +1,37 @@
-﻿using Quartz.Impl;
-using ScheduledJobs.Models;
+﻿using ScheduledJobs.Models;
 using ScheduledJobs.Core.Jobs;
 using ScheduledJobs.Core.Extensions;
+using ScheduledJobs.Core.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace ScheduledJobs.Core.Services
 {
-    public class JobEngineCoreService : JobEngineBaseService
+    public class JobEngineServiceCore : IJobEngineServiceCore
     {
         protected List<ScheduledJob>? lastConfiguration { get; set; }
         protected List<ScheduledJob>? currentConfiguration { get; set; }
         protected ConfigControllerJob controllerJob { get; set; }
+        private readonly IJobService jobService;
+        private readonly IConfiguration configuration;
+        public JobEngineServiceCore(ConfigControllerJob controllerjob,
+            IJobService jobService,
+            IConfiguration configuration)
 
-        public JobEngineCoreService(StdSchedulerFactory stdSchedulerFactory
-                            , ConfigurationService configurationservice
-                            , ConfigControllerJob controllerjob
-                            ) : base(stdSchedulerFactory, configurationservice)
         {
             this.controllerJob = controllerjob;
+            this.jobService = jobService;
+            this.configuration = configuration;
+
         }
 
         public virtual void Run()
         {
-            scheduler.Start().Wait();
+            jobService.Start();
             currentConfiguration = new();
-            if (AddConfigControllerJob)
+
+            var configControllerJobSettings = configuration?.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>().ConfigControllerJobSettings;
+
+            if (configControllerJobSettings.UseConfigControllerJob)
             {
                 AddJob(new ScheduledJob
                 {
@@ -38,7 +46,7 @@ namespace ScheduledJobs.Core.Services
                         {
                             Id = -1,
                             JobId = -1,
-                            PeriodAsCron = JobEngineBaseService.ConfigControllerJobCronPeriod,
+                            PeriodAsCron = configControllerJobSettings .PeriodAsCron,
                             Active = true
                         }
                     }
@@ -47,22 +55,17 @@ namespace ScheduledJobs.Core.Services
         }
         public void AddJob(ScheduledJob job)
         {
-            _ = PopulateJob(job);
+            _ = jobService.PopulateJob(job, this);
         }
         public void PopulateJobs()
         {
-            PopulateJobs(GetConfiguration().Where(x => x.Active).ToList().Where(x => x.JobDetail.Active).ToList()).GetAwaiter().GetResult();
+            jobService.PopulateJobs(currentConfiguration?.Where(x => x.Active).ToList().Where(x => x.JobDetail.Active).ToList(), this).GetAwaiter().GetResult();
         }
         public void SetConfiguration(List<ScheduledJob> configuration)
         {
             currentConfiguration = new();
             currentConfiguration.AddRange(configuration);
         }
-        private List<ScheduledJob> GetConfiguration()
-        {
-            return currentConfiguration;
-        }
-
         public void CheckChanges()
         {
             List<ScheduledJob> Added = new();
@@ -91,7 +94,6 @@ namespace ScheduledJobs.Core.Services
             lastConfiguration = currentConfiguration?.ToList();
             ApplyChanges(Added, Removed, Changed);
         }
-
         private void ApplyChanges(List<ScheduledJob> Added, List<ScheduledJob> Removed, List<ScheduledJob> Changed)
         {
             if (Changed.Count > 0)
@@ -103,7 +105,7 @@ namespace ScheduledJobs.Core.Services
                                     select chn);
                 if (tmpChanged.Any())
                 {
-                    RemoveJobs(tmpChanged).GetAwaiter().GetResult();
+                    jobService.RemoveJobs(tmpChanged).GetAwaiter().GetResult();
                 }
 
                 tmpChanged = new List<ScheduledJob>();
@@ -124,13 +126,13 @@ namespace ScheduledJobs.Core.Services
 
             if (Removed.Count > 0)
             {
-                RemoveJobs(Removed.ToList()).GetAwaiter().GetResult();
+                jobService.RemoveJobs(Removed.ToList()).GetAwaiter().GetResult();
                 Removed.Clear();
             }
 
             if (Added.Count > 0)
             {
-                PopulateJobs(Added.Where(x => x.Active).ToList().Where(x => x.JobDetail.Active).ToList()).GetAwaiter().GetResult();
+                jobService.PopulateJobs(Added.Where(x => x.Active).ToList().Where(x => x.JobDetail.Active).ToList(), this).GetAwaiter().GetResult();
                 Added.Clear();
             }
         }

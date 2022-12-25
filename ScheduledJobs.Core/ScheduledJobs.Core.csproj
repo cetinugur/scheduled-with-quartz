@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ScheduledJobs.Data\ScheduledJobs.Data.csproj" />
-    <ProjectReference Include="..\ScheduledJobs.Models\ScheduledJobs.Models.csproj" />
   </ItemGroup>
 
 </Project>
