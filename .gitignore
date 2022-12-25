@@ -14,3 +14,5 @@ ScheduledJobs.Models/bin
 ScheduledJobs.Models/obj
 /ScheduledJobs.App.MWImpExample/bin/Debug/net7.0
 /ScheduledJobs.App.MWImpExample/obj
+/.vs/ProjectEvaluation
+/.vs/ScheduledWithQuartz/v17/.futdcache.v2
