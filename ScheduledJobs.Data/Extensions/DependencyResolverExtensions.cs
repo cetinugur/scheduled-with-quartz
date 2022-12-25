@@ -2,7 +2,7 @@
 using ScheduledJobs.Data.Interfaces;
 using ScheduledJobs.Data.Services;
 
-namespace ScheduledJobs.Data.DependencyResolverExtensions
+namespace ScheduledJobs.Data.Extensions
 {
     public static class DependencyResolverExtensions
     {

@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz.Impl;
 using ScheduledJobs.Core.Interfaces;
 using ScheduledJobs.Core.Jobs;
 using ScheduledJobs.Core.Services;
-using ScheduledJobs.Data.DependencyResolverExtensions;
+using ScheduledJobs.Data.Extensions;
 
 namespace ScheduledJobs.Core.Extensions
 {
