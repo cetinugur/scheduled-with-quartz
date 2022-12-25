@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.Data", "Sched
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.Models", "ScheduledJobs.Models\ScheduledJobs.Models.csproj", "{A2888B45-63D2-40EB-939C-5A1590D333B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.App.MWImpExample", "ScheduledJobs.App.MWImpExample\ScheduledJobs.App.MWImpExample.csproj", "{268FC58E-4333-4010-8DFA-DA04E0AB3482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{A2888B45-63D2-40EB-939C-5A1590D333B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2888B45-63D2-40EB-939C-5A1590D333B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2888B45-63D2-40EB-939C-5A1590D333B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268FC58E-4333-4010-8DFA-DA04E0AB3482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268FC58E-4333-4010-8DFA-DA04E0AB3482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268FC58E-4333-4010-8DFA-DA04E0AB3482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268FC58E-4333-4010-8DFA-DA04E0AB3482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1F3A4994-B56A-42A7-9FB4-A432EB205265} = {B40DB5F5-4675-404C-A0BF-5F2FC788E457}
+		{268FC58E-4333-4010-8DFA-DA04E0AB3482} = {B40DB5F5-4675-404C-A0BF-5F2FC788E457}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {429F302F-6785-485F-8286-B579817761D6}

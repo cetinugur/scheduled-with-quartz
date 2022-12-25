@@ -8,19 +8,19 @@ namespace ScheduledJobs.Core.Jobs
     public class ConfigControllerJob : ISchedulerJob
     {
         public ScheduledJob? JobModel { get; set; }
-        public ConfigurationService? ConfigurationService { get; set; }
+        public ConfigurationService? ConfigService { get; set; }
         protected JobEngineServiceCore? JobEngineService { get; set; }
 
         public Task Execute(IJobExecutionContext context)
         {
             JobEngineService = (JobEngineServiceCore)context.JobDetail.JobDataMap[nameof(JobEngineServiceCore)];
-            ConfigurationService = (ConfigurationService)context.JobDetail.JobDataMap[nameof(Services.ConfigurationService)];
+            ConfigService = (ConfigurationService)context.JobDetail.JobDataMap[nameof(Services.ConfigurationService)];
             JobModel = (ScheduledJob)context.JobDetail.JobDataMap[nameof(ScheduledJob)];
 
             Console.WriteLine($"{DateTime.Now} : {nameof(ConfigControllerJob)} trigged");
             try
             {
-                JobEngineService.SetConfiguration(ConfigurationService.GetConfiguration());
+                JobEngineService.SetConfiguration(ConfigService.GetConfiguration());
                 JobEngineService.CheckChanges();
             }
             catch (Exception exp)

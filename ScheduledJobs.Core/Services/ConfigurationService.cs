@@ -32,6 +32,7 @@ namespace ScheduledJobs.Core.Services
                 {
                     string[] JobProjects = configuration?.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>().JobProjects;
 
+
                     if (JobProjects is not null && JobProjects.Any())
                     {
                         projects = JobProjects;
@@ -42,7 +43,20 @@ namespace ScheduledJobs.Core.Services
                     }
                 }
 
-                result = modelService.Map(dataService.GetJobs().ToList());
+                var tmpJobs = dataService.GetJobs().ToList();
+                List<ScheduledJob> jobs = new();
+
+                foreach (var item in projects)
+                {
+                    foreach (var job in tmpJobs)
+                    {
+                        if(job.JobName == item)
+                            jobs.Add(job);
+                    
+                    }
+                }
+
+                result = modelService.Map(jobs);
             }
             catch (Exception exp)
             {

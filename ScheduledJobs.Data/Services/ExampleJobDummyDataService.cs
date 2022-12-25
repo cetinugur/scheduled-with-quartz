@@ -3,7 +3,7 @@ using ScheduledJobs.Models;
 
 namespace ScheduledJobs.Data.Services
 {
-    public class DummyDataService : IDataService
+    public class ExampleJobDummyDataService : IDataService
     {
         IEnumerable<ScheduledJob> IDataService.GetJobs()
         {

@@ -8,7 +8,7 @@ namespace ScheduledJobs.Core.Interfaces
     {
         public ScheduledJob JobModel { get; set; }
 
-        public ConfigurationService ConfigurationService { get; set; }
+        public ConfigurationService ConfigService { get; set; }
 
     }
 }

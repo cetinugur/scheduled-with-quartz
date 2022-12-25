@@ -8,7 +8,7 @@ namespace ScheduledJobs.Data.Extensions
     {
         public static IServiceCollection AddDataService(this IServiceCollection services)
         {
-            services.AddSingleton<IDataService, DummyDataService>();
+            services.AddSingleton<IDataService, MiddleWareExampleJobDummyDataService>();
             return services;
         }
     }

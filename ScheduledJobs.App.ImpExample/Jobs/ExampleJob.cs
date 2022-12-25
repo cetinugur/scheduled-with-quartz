@@ -9,14 +9,14 @@ namespace ScheduledJobs.App.ImpExample.Jobs
     public class ExampleJob : ISchedulerJob
     {
         public ScheduledJob? JobModel { get; set; }
-        public ConfigurationService? ConfigurationService { get; set; }
+        public ConfigurationService? ConfigService { get; set; }
 
         public Task Execute(IJobExecutionContext context)
         {
             try
             {
                 JobModel = (ScheduledJob)context.JobDetail.JobDataMap[nameof(ScheduledJob)];
-                ConfigurationService = (ConfigurationService)context.JobDetail.JobDataMap[nameof(ConfigurationService)];
+                ConfigService = (ConfigurationService)context.JobDetail.JobDataMap[nameof(ConfigService)];
 
                 string message = $"{DateTime.Now.ToLocalTime()} : {JobModel.Description} job {JobModel.JobDetail.Name} örneği için çalıştı. Çalışma periyodu {JobModel.JobDetail.PeriodAsCron}";
                 Console.WriteLine(message);
