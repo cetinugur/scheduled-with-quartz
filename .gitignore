@@ -1,1 +1,8 @@
 ﻿*.suo
+ScheduledJobs.App.Core/bin
+ScheduledJobs.App.Core/obj
+ScheduledJobs.Core/obj/Debug
+ScheduledJobs.Core/bin
+/ScheduledJobs.Core/obj
+/.vs/ScheduledWithQuartz/DesignTimeBuild
+/.vs/ScheduledWithQuartz/FileContentIndex
