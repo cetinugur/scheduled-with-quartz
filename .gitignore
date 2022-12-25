@@ -6,3 +6,5 @@ ScheduledJobs.Core/bin
 /ScheduledJobs.Core/obj
 /.vs/ScheduledWithQuartz/DesignTimeBuild
 /.vs/ScheduledWithQuartz/FileContentIndex
+/ScheduledJobs.App.ImpExample/bin/Debug/net7.0
+/ScheduledJobs.App.ImpExample/obj

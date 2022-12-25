@@ -12,8 +12,6 @@ namespace ScheduledJobs.Core.Services
         }
 
         public string[]? JobProjects => configuration.GetSection("ProjectSettings:JobProjects").Get<string[]>();
-        public string? ServiceUrl { get { return configuration.GetSection("ApiSettings:InternalAPIBaseUrl").Value; } }
-        public int SendingDataPartition { get { return Convert.ToInt32(configuration.GetSection("ProjectSettings:SendingDataPartition")?.Value); } }
 
         public List<ScheduledJobModel> GetConfiguration(string[]? projectList = null)
         {
@@ -21,13 +19,13 @@ namespace ScheduledJobs.Core.Services
             try
             {
                 string[]? projects;
-                if (projectList.Any())
+                if (projectList is not null && projectList.Any())
                 {
                     projects = projectList;
                 }
                 else
                 {
-                    if (JobProjects.Any())
+                    if (JobProjects is not null && JobProjects.Any())
                     {
                         projects = JobProjects;
                     }

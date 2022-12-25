@@ -19,7 +19,7 @@ namespace ScheduledJobs.App.Core
             services
                     .AddSingleton<ScheduledJobsEngine>()
                     .AddBusinessServices(config)
-                    .AddControllerJob(config["ProjectSettings:JobConfigControllerJobCronPeriod"])
+                    //.AddControllerJob(config["ProjectSettings:JobConfigControllerJobCronPeriod"])//TODO unutma
                     .AddScheduledEngine();
             return services;
         }

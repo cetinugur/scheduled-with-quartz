@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.Core", "Sched
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.App.Core", "ScheduledJobs.App.Core\ScheduledJobs.App.Core.csproj", "{94507C87-66F8-4A16-B48A-217679FDFA12}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{B40DB5F5-4675-404C-A0BF-5F2FC788E457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledJobs.App.ImpExample", "ScheduledJobs.App.ImpExample\ScheduledJobs.App.ImpExample.csproj", "{1F3A4994-B56A-42A7-9FB4-A432EB205265}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{94507C87-66F8-4A16-B48A-217679FDFA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94507C87-66F8-4A16-B48A-217679FDFA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94507C87-66F8-4A16-B48A-217679FDFA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F3A4994-B56A-42A7-9FB4-A432EB205265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F3A4994-B56A-42A7-9FB4-A432EB205265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F3A4994-B56A-42A7-9FB4-A432EB205265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F3A4994-B56A-42A7-9FB4-A432EB205265}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1F3A4994-B56A-42A7-9FB4-A432EB205265} = {B40DB5F5-4675-404C-A0BF-5F2FC788E457}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {429F302F-6785-485F-8286-B579817761D6}
